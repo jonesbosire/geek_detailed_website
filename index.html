@@ -431,7 +431,65 @@ Your ride stays fresh hadi next weekend.</p>
       </form>
     </div>
   </div>
+    <!-- Contact / Footer -->
+  <footer id="contact" class="bg-white border-t mt-8">
+    <div class="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div>
+        <h4 class="text-lg font-semibold">Geek_Detailed</h4>
+        <p class="mt-2 text-sm text-gray-600">Premium Car Detailing Experts — restoring, protecting and elevating your vehicle.</p>
+      </div>
 
+      <div>
+        <h5 class="font-medium">Service Hours</h5>
+        <p class="mt-2 text-sm text-gray-600">Friday — Sunday: 08:00 — 18:00</p>
+        <p class="mt-2 text-sm text-gray-600">Closed: Monday — Thursday</p>
+      </div>
+
+      <div>
+        <h5 class="font-medium">Contact</h5>
+        <p class="mt-2 text-sm text-gray-600">Phone / WhatsApp: +254 748 835 690</p>
+        <p class="mt-2 text-sm text-gray-600">Email: bosirejones19@gmail.com</p>
+        <div class="mt-4 flex gap-3">
+          <a href="#" aria-label="Instagram" class="text-sm text-gray-600">Instagram</a>
+          <a href="#" aria-label="TikTok" class="text-sm text-gray-600">TikTok</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t">
+      <div class="max-w-5xl mx-auto px-6 py-4 text-sm text-gray-500">© 2025 Geek_Detailed — All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Button -->
+  <a href="https://wa.me/254748835690?text=Hi%20Geek_Detailed,%20I%20would%20like%20to%20book%20a%20detailing%20session." class="fixed right-5 bottom-5 z-50 rounded-full p-3 shadow-lg bg-green-500" aria-label="Chat on WhatsApp">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.52 3.48A11.92 11.92 0 0012 .5C6.21.5 1.6 4.8.56 10.28a11.92 11.92 0 001.71 8.16L.5 24l5.7-1.48a11.93 11.93 0 005.77 1.43h.01c5.79 0 10.4-4.3 11.44-9.78a11.92 11.92 0 00-2.2-8.69z" fill="#fff"/>
+    </svg>
+  </a>
+
+  <script>
+    // Mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobileMenu a').forEach(a=>a.addEventListener('click', ()=> mobileMenu.classList.add('hidden')));
+
+    // Make details elements accessible via keyboard
+    document.querySelectorAll('details').forEach(d => {
+      d.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') d.open = !d.open;
+      });
+    });
+  </script>
+
+  
   <script>   
 
     /* ---------------- Quick Quote logic ---------------- */
@@ -504,71 +562,6 @@ Your ride stays fresh hadi next weekend.</p>
         modal.classList.remove('flex');
         clearTimeout(modalTimer);
       }
-    });
-  </script>
-</body>
-</html>
-
-
-
-
-  
-
-  <!-- Contact / Footer -->
-  <footer id="contact" class="bg-white border-t mt-8">
-    <div class="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div>
-        <h4 class="text-lg font-semibold">Geek_Detailed</h4>
-        <p class="mt-2 text-sm text-gray-600">Premium Car Detailing Experts — restoring, protecting and elevating your vehicle.</p>
-      </div>
-
-      <div>
-        <h5 class="font-medium">Service Hours</h5>
-        <p class="mt-2 text-sm text-gray-600">Friday — Sunday: 08:00 — 18:00</p>
-        <p class="mt-2 text-sm text-gray-600">Closed: Monday — Thursday</p>
-      </div>
-
-      <div>
-        <h5 class="font-medium">Contact</h5>
-        <p class="mt-2 text-sm text-gray-600">Phone / WhatsApp: +254 748 835 690</p>
-        <p class="mt-2 text-sm text-gray-600">Email: bosirejones19@gmail.com</p>
-        <div class="mt-4 flex gap-3">
-          <a href="#" aria-label="Instagram" class="text-sm text-gray-600">Instagram</a>
-          <a href="#" aria-label="TikTok" class="text-sm text-gray-600">TikTok</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="border-t">
-      <div class="max-w-5xl mx-auto px-6 py-4 text-sm text-gray-500">© 2025 Geek_Detailed — All Rights Reserved.</div>
-    </div>
-  </footer>
-
-  <!-- Floating WhatsApp Button -->
-  <a href="https://wa.me/254748835690?text=Hi%20Geek_Detailed,%20I%20would%20like%20to%20book%20a%20detailing%20session." class="fixed right-5 bottom-5 z-50 rounded-full p-3 shadow-lg bg-green-500" aria-label="Chat on WhatsApp">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20.52 3.48A11.92 11.92 0 0012 .5C6.21.5 1.6 4.8.56 10.28a11.92 11.92 0 001.71 8.16L.5 24l5.7-1.48a11.93 11.93 0 005.77 1.43h.01c5.79 0 10.4-4.3 11.44-9.78a11.92 11.92 0 00-2.2-8.69z" fill="#fff"/>
-    </svg>
-  </a>
-
-  <script>
-    // Mobile menu
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (menuBtn) {
-      menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-      });
-    }
-
-    // Close mobile menu on link click
-    document.querySelectorAll('#mobileMenu a').forEach(a=>a.addEventListener('click', ()=> mobileMenu.classList.add('hidden')));
-
-    // Make details elements accessible via keyboard
-    document.querySelectorAll('details').forEach(d => {
-      d.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') d.open = !d.open;
-      });
     });
   </script>
 </body>
