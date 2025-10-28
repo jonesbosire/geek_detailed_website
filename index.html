@@ -502,9 +502,34 @@ Your ride stays fresh hadi next weekend.</p>
       { key: 'prado', label: 'Prado / Landcruiser (Large SUV)', multiplier: 2.2 }
     ];
     // default package base prices
-    const packageBase = { basic: 1500, premium: 3500, elite: 7000 };
-    // location surcharge (example)
-    const locationSurcharge = { Eldoret: 0, Nairobi: 300, Kisumu: 200, Nakuru: 150 };
+    // --- Updated Package Base Prices ---
+    const packageBase = { 
+        impala: 1500, 
+        buffalo: 3000, 
+        lion: 5000, 
+        elephant: 7500 
+      
+    };
+    function calculateQuote() {
+    // 1. Get Base Package Price from the updated constant
+    const packageType = document.getElementById('packageType').value;
+    const basePrice = packageBase[packageType] || 0; // Use || 0 as a safety fallback
+
+    // 2. Get Location Surcharge (Value from the hidden field, set by your distance logic)
+    const locationSurchargeAmount = parseInt(document.getElementById('locationSurcharge').value) || 0; 
+    
+    // 3. Get Add-ons
+    const addonAir = document.getElementById('addonAir').checked ? 200 : 0;
+    const addonTyre = document.getElementById('addonTyre').checked ? 250 : 0;
+
+    // 4. Calculate Total
+    const totalEstimate = basePrice + locationSurchargeAmount + addonAir + addonTyre;
+
+    // 5. Display Result
+    document.getElementById('estimateAmount').textContent = `Ksh ${totalEstimate.toLocaleString('en-KE')}`;
+    document.getElementById('quoteResult').classList.remove('hidden');
+    // ... (Update WhatsApp link with total and location info)
+}
 
     // populate vehicle dropdown
     const vSelect = document.getElementById('vehicleType');
