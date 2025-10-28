@@ -432,78 +432,7 @@ Your ride stays fresh hadi next weekend.</p>
     </div>
   </div>
 
-  <script>
-    /***** Sample product data - edit here to add items (single source of truth) *****/
-    const products = [
-      {
-        id: 'foam-shampoo-1l',
-        name: 'Foam Shampoo (1L)',
-        price: 700,
-        short: 'High-foaming shampoo for safe paint cleaning',
-        description: 'pH-balanced foam shampoo. Safe on wax and sealants. Great suds and rinse-off.',
-        image: 'img/shampoo_1l.jpg'
-      },
-      {
-        id: 'tire-shine-500ml',
-        name: 'Tire Shine (500ml)',
-        price: 500,
-        short: 'Long-lasting tyre dressing for gloss',
-        description: 'Silicone-based treatment for deep gloss and protection.',
-        image: 'img/tyre_shine.jpg'
-      },
-      {
-        id: 'microfiber-towel',
-        name: 'Microfiber Towel (Pack of 3)',
-        price: 450,
-        short: 'Soft, durable towels for swirl-free drying',
-        description: '2000 GSM, lint-free microfiber towels ideal for drying & buffing.',
-        image: 'img/microfiber.jpg'
-      },
-      {
-        id: 'interior-cleaner',
-        name: 'Interior Cleaner (500ml)',
-        price: 650,
-        short: 'Multi-surface cleaner for fabrics and plastics',
-        description: 'Safe on upholstery, plastics and vinyl. Lifts stains without bleaching.',
-        image: 'img/interior_cleaner.jpg'
-      },
-      {
-        id: 'detailer-spray',
-        name: 'Quick Detailer Spray (500ml)',
-        price: 850,
-        short: 'Fast shine between washes',
-        description: 'Spray-on quick detailer for instant gloss and water beading.',
-        image: 'img/detailer_spray.jpg'
-      },
-      {
-        id: 'brush-set',
-        name: 'Detailing Brush Set',
-        price: 1200,
-        short: 'Precision brushes for vents, seams & rims',
-        description: 'Multi-size nylon brush set for interior and exterior detailing.',
-        image: 'img/brush_set.jpg'
-      }
-    ];
-
-    // Render products grid
-    const grid = document.getElementById('productsGrid');
-    products.forEach(p => {
-      const card = document.createElement('article');
-      card.className = 'bg-white rounded-lg p-4 card-shadow flex flex-col';
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.name}" class="h-44 w-full object-cover rounded-md mb-3">
-        <h3 class="font-semibold">${p.name}</h3>
-        <p class="text-sm text-gray-600 mb-3">${p.short}</p>
-        <div class="mt-auto flex items-center justify-between">
-          <div class="text-lg font-semibold">Ksh ${p.price}</div>
-          <div class="flex gap-2">
-            <a href="product.html?id=${encodeURIComponent(p.id)}" class="inline-block px-3 py-2 rounded-md border border-gray-200 text-sm">View</a>
-            <a href="https://wa.me/254748835690?text=Hi%20Geek_Detailed,%20I%20want%20to%20buy%20${encodeURIComponent(p.name)}" class="inline-block px-3 py-2 rounded-md gradient-btn text-white text-sm">Buy</a>
-          </div>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+  <script>   
 
     /* ---------------- Quick Quote logic ---------------- */
     const vehicleOptions = [
