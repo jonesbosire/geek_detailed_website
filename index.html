@@ -424,6 +424,7 @@
         <div class="flex gap-2 items-center">
           <input id="addonTyre" type="checkbox" class="h-4 w-4 accent-magenta" />
           <label for="addonTyre" class="text-gray-200 text-sm">Tyre shine (+Ksh 250)</label>
+          <input type="hidden" id="locationSurcharge" value="0">
         </div>
 
         <div class="pt-2">
@@ -499,106 +500,94 @@
       });
     });
   </script>
+<!-- Pop-up logic -->
 
-  
-  <script>   
+  <script>
+  /* ---------------- Quick Quote logic ---------------- */
+  const vehicleOptions = [
+    { key: 'vitz', label: 'Toyota Vitz (small)', multiplier: 1 },
+    { key: 'probox', label: 'Toyota Probox (small estate)', multiplier: 1.1 },
+    { key: 'demio', label: 'Mazda Demio (hatch)', multiplier: 1 },
+    { key: 'corolla', label: 'Toyota Corolla (saloon)', multiplier: 1.2 },
+    { key: 'rav4', label: 'RAV4 / Forester (SUV)', multiplier: 1.6 },
+    { key: 'prado', label: 'Prado / Landcruiser (Large SUV)', multiplier: 2.2 }
+  ];
 
-    /* ---------------- Quick Quote logic ---------------- */
-    const vehicleOptions = [
-      { key: 'vitz', label: 'Toyota Vitz (small)', multiplier: 1 },
-      { key: 'probox', label: 'Toyota Probox (small estate)', multiplier: 1.1 },
-      { key: 'demio', label: 'Mazda Demio (hatch)', multiplier: 1 },
-      { key: 'corolla', label: 'Toyota Corolla (saloon)', multiplier: 1.2 },
-      { key: 'rav4', label: 'RAV4 / Forester (SUV)', multiplier: 1.6 },
-      { key: 'prado', label: 'Prado / Landcruiser (Large SUV)', multiplier: 2.2 }
-    ];
-    // default package base prices
-    // --- Updated Package Base Prices ---
-    const packageBase = { 
-        impala: 1500, 
-        buffalo: 3000, 
-        lion: 5000, 
-        elephant: 7500 
-      
-    };
-    function calculateQuote() {
-    // 1. Get Base Package Price from the updated constant
-    const packageType = document.getElementById('packageType').value;
-    const basePrice = packageBase[packageType] || 0; // Use || 0 as a safety fallback
+  const packageBase = { 
+    impala: 1500, 
+    buffalo: 3000, 
+    lion: 5000, 
+    elephant: 7500 
+  };
 
-    // 2. Get Location Surcharge (Value from the hidden field, set by your distance logic)
-    const locationSurchargeAmount = parseInt(document.getElementById('locationSurcharge').value) || 0; 
-    
-    // 3. Get Add-ons
-    const addonAir = document.getElementById('addonAir').checked ? 200 : 0;
-    const addonTyre = document.getElementById('addonTyre').checked ? 250 : 0;
+  const locationSurcharge = {
+    Eldoret: 0,
+    Nairobi: 500,
+    Kisumu: 300,
+    Nakuru: 200
+  };
 
-    // 4. Calculate Total
-    const totalEstimate = basePrice + locationSurchargeAmount + addonAir + addonTyre;
+  // Populate vehicle dropdown
+  const vSelect = document.getElementById('vehicleType');
+  vehicleOptions.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.key;
+    opt.textContent = v.label;
+    vSelect.appendChild(opt);
+  });
 
-    // 5. Display Result
-    document.getElementById('estimateAmount').textContent = `Ksh ${totalEstimate.toLocaleString('en-KE')}`;
+  function getVehicleMultiplier(key) {
+    const v = vehicleOptions.find(x => x.key === key);
+    return v ? v.multiplier : 1;
+  }
+
+  function calculateQuote() {
+    const v = document.getElementById('vehicleType').value;
+    const loc = document.getElementById('location').value;
+    const pkg = document.getElementById('packageType').value;
+    const addAir = document.getElementById('addonAir').checked;
+    const addTyre = document.getElementById('addonTyre').checked;
+
+    const base = packageBase[pkg] || 0;
+    const multiplier = getVehicleMultiplier(v);
+    const locAdd = locationSurcharge[loc] || 0;
+
+    let total = Math.round(base * multiplier + locAdd + (addAir ? 200 : 0) + (addTyre ? 250 : 0));
+
+    // Display result
+    document.getElementById('estimateAmount').textContent = `Ksh ${total.toLocaleString('en-KE')}`;
     document.getElementById('quoteResult').classList.remove('hidden');
-    // ... (Update WhatsApp link with total and location info)
-}
 
-    // populate vehicle dropdown
-    const vSelect = document.getElementById('vehicleType');
-    vehicleOptions.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v.key;
-      opt.textContent = v.label;
-      vSelect.appendChild(opt);
-    });
+    // WhatsApp link
+    const vLabel = vehicleOptions.find(x=>x.key===v)?.label || v;
+    const waText = `Hi Geek_Detailed,%0AI need a quick quote.%0AVehicle: ${vLabel}%0ALocation: ${loc}%0APackage: ${pkg}%0AAdd-ons: ${addAir ? 'Air Freshener ' : ''}${addTyre ? 'Tyre Shine' : ''}%0A%0AEstimated Total: Ksh ${total.toLocaleString('en-KE')}`;
+    document.getElementById('quoteWhatsapp').href = `https://wa.me/254748835690?text=${waText}`;
+  }
 
-    // show modal after 7 seconds
-    const modal = document.getElementById('quoteModal');
-    let modalTimer = setTimeout(() => {
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }, 7000);
+  document.getElementById('calcQuote').addEventListener('click', calculateQuote);
 
-    document.getElementById('closeQuote').addEventListener('click', () => {
+  // Show modal after 7 seconds
+  const modal = document.getElementById('quoteModal');
+  let modalTimer = setTimeout(() => {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }, 7000);
+
+  document.getElementById('closeQuote').addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    clearTimeout(modalTimer);
+  });
+
+  // Close modal on outside click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       clearTimeout(modalTimer);
-    });
-
-    function getVehicleMultiplier(key){
-      const v = vehicleOptions.find(x => x.key === key);
-      return v ? v.multiplier : 1;
     }
+  });
+</script>
 
-    document.getElementById('calcQuote').addEventListener('click', () => {
-      const v = document.getElementById('vehicleType').value;
-      const loc = document.getElementById('location').value;
-      const pkg = document.getElementById('packageType').value;
-      const addAir = document.getElementById('addonAir').checked;
-      const addTyre = document.getElementById('addonTyre').checked;
-
-      const base = packageBase[pkg] || packageBase.basic;
-      const multiplier = getVehicleMultiplier(v);
-      const locAdd = locationSurcharge[loc] || 0;
-      let total = Math.round(base * multiplier + locAdd + (addAir ? 200 : 0) + (addTyre ? 250 : 0));
-      document.getElementById('estimateAmount').textContent = `Ksh ${total}`;
-      document.getElementById('quoteResult').classList.remove('hidden');
-
-      // prepare whatsapp message
-      const vLabel = vehicleOptions.find(x=>x.key===v)?.label || v;
-      const waText = `Hi Geek_Detailed, I need a quick quote. Vehicle: ${vLabel}. Location: ${loc}. Package: ${pkg}. Add-ons: ${addAir ? 'Air Freshener' : ''}${addAir && addTyre ? ', ' : ''}${addTyre ? 'Tyre Shine' : ''}. Estimated total: Ksh ${total}.`;
-      const waLink = `https://wa.me/254748835690?text=${encodeURIComponent(waText)}`;
-      const waBtn = document.getElementById('quoteWhatsapp');
-      waBtn.href = waLink;
-    });
-
-    // close modal if user clicks outside (optional)
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        clearTimeout(modalTimer);
-      }
-    });
-  </script>
 </body>
 </html>
