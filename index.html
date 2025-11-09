@@ -382,9 +382,9 @@
 
 
 
-<!-- Quick Quote Modal (Enhanced) -->
+<!-- Quick Quote Modal -->
 <div id="quoteModal" class="fixed inset-0 hidden items-center justify-center z-50">
-  <!-- Dark Glassy Background -->
+  <!-- Background -->
   <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
 
   <!-- Modal Box -->
@@ -392,37 +392,46 @@
     <div class="relative w-full h-full bg-gray-900/90 backdrop-blur-md rounded-xl p-6 text-white">
       <button id="closeQuote" class="absolute top-3 right-3 text-white/80 hover:text-white">✕</button>
       
-      <h3 class="text-xl font-semibold mb-3">Quick Quote — Personalized for Eldoret</h3>
-
-      <form id="quoteForm" class="space-y-3 text-sm">
-
-        <!-- Vehicle Type -->
+      <h3 class="text-xl font-semibold mb-3">Quick Quote — Get an estimate</h3>
+      <form id="quoteForm" class="space-y-3 text-sm" onsubmit="return false;">
+        
+        <!-- Vehicle type -->
         <label class="block">
-          <span class="text-gray-200">Vehicle Type</span>
-          <select id="vehicleType" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none" required>
-            <option value="">Select vehicle</option>
-            <option value="saloon">Saloon (e.g. Axio, Premio)</option>
-            <option value="SUV">SUV (e.g. Harrier, Prado, CX-5)</option>
-            <option value="pickup">Pickup (e.g. Hilux, D-Max)</option>
-            <option value="van">Van (e.g. Noah, Hiace)</option>
+          <span class="text-gray-200">Vehicle type</span>
+          <select id="vehicleType" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none"></select>
+        </label>
+
+        <!-- Localized location options -->
+        <label class="block">
+          <span class="text-gray-200">Location (Eldoret Area)</span>
+          <select id="location" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none">
+            <option value="Eldoret CBD">Eldoret CBD</option>
+            <option value="Elgon View">Elgon View</option>
+            <option value="Kapsoya">Kapsoya</option>
+            <option value="Maili Nne">Maili Nne</option>
+            <option value="Langas">Langas</option>
+            <option value="Annex">Annex</option>
+            <option value="Racecourse">Racecourse</option>
+            <option value="Pioneer">Pioneer</option>
+            <option value="Outskirts">Outside Eldoret</option>
           </select>
         </label>
 
-        <!-- Location (Google Autocomplete) -->
+        <!-- Distance -->
         <label class="block">
-          <span class="text-gray-200">Exact Location (Eldoret or nearby)</span>
-          <input id="locationInput" type="text" placeholder="Type your location..." class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none" required />
-          <input type="hidden" id="distanceKm" value="0">
+          <span class="text-gray-200">Distance from Eldoret CBD (Km)</span>
+          <input id="distance" type="number" min="0" placeholder="0" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none" />
+          <small class="text-gray-400 text-xs">Add Ksh 50 per km for services outside Eldoret</small>
         </label>
 
-        <!-- Package -->
+        <!-- Package selection -->
         <label class="block">
           <span class="text-gray-200">Package</span>
-          <select id="packageType" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none" required>
-            <option value="impala">Impala (Basic)</option>
-            <option value="buffalo">Buffalo (Standard)</option>
-            <option value="lion">Lion (Premium)</option>
-            <option value="elephant">Elephant (Full Detail)</option>
+          <select id="packageType" class="mt-1 w-full rounded-md p-2 bg-gray-800/50 border border-white/20 text-white focus:outline-none">
+            <option value="impala">Impala</option>
+            <option value="buffalo">Buffalo</option>
+            <option value="lion">Lion</option>
+            <option value="elephant">Elephant</option>
           </select>
         </label>
 
@@ -437,7 +446,7 @@
           <label for="addonTyre" class="text-gray-200 text-sm">Tyre shine (+Ksh 250)</label>
         </div>
 
-        <!-- Calculate -->
+        <!-- Estimate button -->
         <div class="pt-2">
           <button id="calcQuote" type="button" class="w-full px-4 py-2 rounded-md bg-white text-magenta font-medium hover:bg-magenta hover:text-white transition">Get Estimate</button>
         </div>
@@ -445,16 +454,15 @@
         <!-- Result -->
         <div id="quoteResult" class="mt-3 hidden p-3 bg-white/5 rounded-md border border-white/10">
           <div class="text-sm">Estimated total: <span id="estimateAmount" class="font-semibold">Ksh 0</span></div>
-          <div class="text-xs text-gray-400" id="distanceNote"></div>
           <div class="mt-2">
             <a id="quoteWhatsapp" href="#" target="_blank" class="inline-block px-4 py-2 rounded-md bg-magenta text-white text-sm hover:bg-magenta/90 transition">Message on WhatsApp</a>
           </div>
         </div>
+
       </form>
     </div>
   </div>
 </div>
-
 
     <!-- Contact / Footer -->
   <footer id="contact" class="bg-white border-t mt-8">
@@ -514,9 +522,9 @@
     });
   </script>
 <!-- Pop-up logic -->
-<!-- Script logic -->
 <script>
-  /* ---------------- Quick Quote logic (localized, API-free) ---------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  /* ---------------- Quick Quote logic (localized) ---------------- */
   const vehicleOptions = [
     { key: 'vitz', label: 'Toyota Vitz (small)', multiplier: 1 },
     { key: 'probox', label: 'Toyota Probox (small estate)', multiplier: 1.1 },
@@ -533,7 +541,7 @@
     elephant: 7500 
   };
 
-  // Populate vehicle dropdown
+  // Populate vehicles
   const vSelect = document.getElementById('vehicleType');
   vehicleOptions.forEach(v => {
     const opt = document.createElement('option');
@@ -542,12 +550,12 @@
     vSelect.appendChild(opt);
   });
 
-  function getVehicleMultiplier(key) {
-    const v = vehicleOptions.find(x => x.key === key);
-    return v ? v.multiplier : 1;
-  }
+  // Helpers
+  const getVehicleMultiplier = key => (vehicleOptions.find(x => x.key === key)?.multiplier) || 1;
 
-  function calculateQuote() {
+  // Calculate quote
+  const calcQuoteBtn = document.getElementById('calcQuote');
+  calcQuoteBtn.addEventListener('click', () => {
     const v = document.getElementById('vehicleType').value;
     const loc = document.getElementById('location').value;
     const distance = parseFloat(document.getElementById('distance').value) || 0;
@@ -557,25 +565,21 @@
 
     const base = packageBase[pkg] || 0;
     const multiplier = getVehicleMultiplier(v);
-
-    // Add distance-based surcharge (Ksh 50/km beyond Eldoret CBD)
     const distanceCharge = distance > 0 ? distance * 50 : 0;
 
     let total = Math.round(base * multiplier + distanceCharge + (addAir ? 200 : 0) + (addTyre ? 250 : 0));
 
-    // Display result
+    // Show result
     document.getElementById('estimateAmount').textContent = `Ksh ${total.toLocaleString('en-KE')}`;
     document.getElementById('quoteResult').classList.remove('hidden');
 
-    // WhatsApp message
+    // WhatsApp link
     const vLabel = vehicleOptions.find(x => x.key === v)?.label || v;
     const waText = `Hi Geek_Detailed,%0AI need a quick quote.%0AVehicle: ${vLabel}%0ALocation: ${loc}%0ADistance: ${distance} km%0APackage: ${pkg}%0AAdd-ons: ${addAir ? 'Air Freshener ' : ''}${addTyre ? 'Tyre Shine' : ''}%0A%0AEstimated Total: Ksh ${total.toLocaleString('en-KE')}`;
     document.getElementById('quoteWhatsapp').href = `https://wa.me/254748835690?text=${waText}`;
-  }
+  });
 
-  document.getElementById('calcQuote').addEventListener('click', calculateQuote);
-
-  // Modal auto-show logic
+  // Modal auto-show
   const modal = document.getElementById('quoteModal');
   let modalTimer = setTimeout(() => {
     modal.classList.remove('hidden');
@@ -588,7 +592,6 @@
     clearTimeout(modalTimer);
   });
 
-  // Close modal on outside click
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.classList.add('hidden');
@@ -596,7 +599,7 @@
       clearTimeout(modalTimer);
     }
   });
-</script>
- 
+});
+</script> 
 </body>
 </html>
