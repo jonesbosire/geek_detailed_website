@@ -514,9 +514,9 @@
     });
   </script>
 <!-- Pop-up logic -->
-
-  <script>
-  /* ---------------- Quick Quote logic ---------------- */
+<!-- Script logic -->
+<script>
+  /* ---------------- Quick Quote logic (localized, API-free) ---------------- */
   const vehicleOptions = [
     { key: 'vitz', label: 'Toyota Vitz (small)', multiplier: 1 },
     { key: 'probox', label: 'Toyota Probox (small estate)', multiplier: 1.1 },
@@ -531,13 +531,6 @@
     buffalo: 3000, 
     lion: 5000, 
     elephant: 7500 
-  };
-
-  const locationSurcharge = {
-    Eldoret: 0,
-    Nairobi: 500,
-    Kisumu: 300,
-    Nakuru: 200
   };
 
   // Populate vehicle dropdown
@@ -557,29 +550,32 @@
   function calculateQuote() {
     const v = document.getElementById('vehicleType').value;
     const loc = document.getElementById('location').value;
+    const distance = parseFloat(document.getElementById('distance').value) || 0;
     const pkg = document.getElementById('packageType').value;
     const addAir = document.getElementById('addonAir').checked;
     const addTyre = document.getElementById('addonTyre').checked;
 
     const base = packageBase[pkg] || 0;
     const multiplier = getVehicleMultiplier(v);
-    const locAdd = locationSurcharge[loc] || 0;
 
-    let total = Math.round(base * multiplier + locAdd + (addAir ? 200 : 0) + (addTyre ? 250 : 0));
+    // Add distance-based surcharge (Ksh 50/km beyond Eldoret CBD)
+    const distanceCharge = distance > 0 ? distance * 50 : 0;
+
+    let total = Math.round(base * multiplier + distanceCharge + (addAir ? 200 : 0) + (addTyre ? 250 : 0));
 
     // Display result
     document.getElementById('estimateAmount').textContent = `Ksh ${total.toLocaleString('en-KE')}`;
     document.getElementById('quoteResult').classList.remove('hidden');
 
-    // WhatsApp link
-    const vLabel = vehicleOptions.find(x=>x.key===v)?.label || v;
-    const waText = `Hi Geek_Detailed,%0AI need a quick quote.%0AVehicle: ${vLabel}%0ALocation: ${loc}%0APackage: ${pkg}%0AAdd-ons: ${addAir ? 'Air Freshener ' : ''}${addTyre ? 'Tyre Shine' : ''}%0A%0AEstimated Total: Ksh ${total.toLocaleString('en-KE')}`;
+    // WhatsApp message
+    const vLabel = vehicleOptions.find(x => x.key === v)?.label || v;
+    const waText = `Hi Geek_Detailed,%0AI need a quick quote.%0AVehicle: ${vLabel}%0ALocation: ${loc}%0ADistance: ${distance} km%0APackage: ${pkg}%0AAdd-ons: ${addAir ? 'Air Freshener ' : ''}${addTyre ? 'Tyre Shine' : ''}%0A%0AEstimated Total: Ksh ${total.toLocaleString('en-KE')}`;
     document.getElementById('quoteWhatsapp').href = `https://wa.me/254748835690?text=${waText}`;
   }
 
   document.getElementById('calcQuote').addEventListener('click', calculateQuote);
 
-  // Show modal after 7 seconds
+  // Modal auto-show logic
   const modal = document.getElementById('quoteModal');
   let modalTimer = setTimeout(() => {
     modal.classList.remove('hidden');
@@ -601,6 +597,6 @@
     }
   });
 </script>
-
+ 
 </body>
 </html>
